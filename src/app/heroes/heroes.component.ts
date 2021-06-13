@@ -7,7 +7,10 @@ import { Hero } from '../model/hero';
   styleUrls: ['./heroes.component.scss']
 })
 export class HeroesComponent implements OnInit {
-  hero:  = 'Windstorm';
+  hero: Hero = {
+    id: 1,
+    name: 'Windstorm'
+  };
   constructor() { }
 
   ngOnInit(): void {
