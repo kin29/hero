@@ -3,7 +3,7 @@ import { Hero } from "../model/hero";
 import { HEROES } from "../mock-heroes";
 import { Observable, of } from "rxjs";
 import { MessageService } from "./message.service";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { catchError, map, tap } from "rxjs/operators";
 
 @Injectable({
@@ -11,6 +11,9 @@ import { catchError, map, tap } from "rxjs/operators";
 })
 export class HeroService {
   private heroesUrl = 'api/heroes'
+  httpOptions = {
+    headers: new HttpHeaders({'Content-Type': 'application/json'})
+  };
   constructor(
     private http: HttpClient,
     private messageService: MessageService,
@@ -54,5 +57,12 @@ export class HeroService {
       // 空の結果を返して、アプリを持続可能にする
       return of(result as T);
     };
+  }
+
+  updateHero(hero: Hero): Observable<any>{
+    return this.http.put(this.heroesUrl, hero, this.httpOptions).pipe(
+      tap(_ => this.log(`update hero id=${hero.id}`)),
+      catchError(this.handleError<any>('updateHero'))
+    );
   }
 }
